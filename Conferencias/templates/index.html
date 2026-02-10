@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ event.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <span class="event-date">{{ event.date }}</span>
+                <h1>{{ event.name }}</h1>
+                <p class="event-location">📍 {{ event.location }}</p>
+                <p class="event-desc">{{ event.description }}</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        
+        <section class="search-section">
+            <div class="search-box">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.031 16.617l4.283 4.282-1.415 1.415-4.282-4.283A8.96 8.96 0 0 1 11 18c-4.968 0-9-4.032-9-9s4.032-9 9-9 9 4.032 9 9a8.96 8.96 0 0 1-1.969 5.617zm-2.006-.742A6.977 6.977 0 0 0 18 11c0-3.868-3.133-7-7-7-3.868 0-7 3.132-7 7 0 3.867 3.132 7 7 7a6.977 6.977 0 0 0 4.875-1.975l.15-.15z"/></svg>
+                <input type="text" id="searchInput" placeholder="Search talks, speakers, or categories...">
+            </div>
+            <div class="filters">
+                <button class="filter-chip active" data-filter="all">All</button>
+                <button class="filter-chip" data-filter="AI/ML">AI/ML</button>
+                <button class="filter-chip" data-filter="Infrastructure">Infrastructure</button>
+                <button class="filter-chip" data-filter="Security">Security</button>
+                <button class="filter-chip" data-filter="Data">Data</button>
+            </div>
+        </section>
+
+        <section class="schedule-section">
+            <h2>Schedule</h2>
+            <div class="timeline" id="scheduleList">
+                {% for item in schedule %}
+                <div class="schedule-item {{ item.type }} card" data-title="{{ item.title }}" 
+                     data-speakers="{% for s in item.speakers_data %}{{ s.first }} {{ s.last }} {% endfor %}" 
+                     data-categories="{{ ', '.join(item.categories) }}">
+                    
+                    <div class="time-col">
+                        <span class="start-time">{{ item.start_time }}</span>
+                        <span class="end-time">{{ item.end_time }}</span>
+                    </div>
+
+                    <div class="content-col">
+                        <div class="item-header">
+                            <h3 class="item-title">{{ item.title }}</h3>
+                            {% if item.type == 'talk' %}
+                                <div class="categories">
+                                    {% for cat in item.categories %}
+                                        <span class="category-tag">{{ cat }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <p class="item-desc">{{ item.description }}</p>
+
+                        {% if item.speakers_data %}
+                        <div class="speakers">
+                            {% for speaker in item.speakers_data %}
+                            <div class="speaker">
+                                <span class="speaker-name">{{ speaker.first }} {{ speaker.last }}</span>
+                                <span class="speaker-role">{{ speaker.role }}</span>
+                                {% if speaker.linkedin %}
+                                    <a href="{{ speaker.linkedin }}" target="_blank" class="linkedin-link">in</a>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="noResults" class="hidden">
+                <p>No talks found matching your search.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 {{ event.name }}. All rights reserved.</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

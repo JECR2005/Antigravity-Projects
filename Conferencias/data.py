@@ -4,8 +4,8 @@ from datetime import datetime, time
 # Conference Info
 EVENT_INFO = {
     "name": "Google Cloud Next Gen 2026",
-    "date": "October 15, 2026",
-    "location": "Moscone Center, San Francisco, CA",
+    "date": "February 14, 2026",
+    "location": "Expo Tampico, Tampico, Tamaulipas",
     "description": "A deep dive into the future of cloud computing, AI, and infrastructure."
 }
 
